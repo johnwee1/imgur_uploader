@@ -1,0 +1,6 @@
+*.jpg
+venv
+.idea/
+__pycache__/
+albums.txt
+config.txt
