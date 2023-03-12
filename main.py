@@ -46,11 +46,14 @@ with open(config, 'w') as f:
     f.write("PREV_ALBUM_HASH=" + str(album_info[1]) )
 
 imageprocess.getfile(client_id, album_info[1])
+
 print("After uploading, access your album at this link: " + album_url)
 album_save_file = os.path.join(os.getcwd(), "albums.txt")
 if not use_prev_album:
     with open(album_save_file, 'a') as savefile:
-        savefile.write(f"Album title: {album_title}\nAlbum URL: {album_url}\nAlbum DeleteHash: {str(album_info[1])}\n\n")
+        savefile.write(f"Album title: {album_title}\n\
+                         Album URL: {album_url}\n\
+                         Album DeleteHash: {str(album_info[1])}\n\n")
 
 
 print("Operation Finished!")
