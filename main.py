@@ -2,7 +2,7 @@ import os
 import imageprocess
 import uploader
 APP_VERSION = "1.0"
-# client ID ae33cb66617c656 <-- let everyone use this ID for now
+DEFAULT_CLIENT_ID = "ae33cb66617c656" # <-- let everyone use this ID for now
 
 print("imgur uploader v" + APP_VERSION + "\n")
 config = os.path.join(os.getcwd(), "config.txt")
@@ -24,7 +24,7 @@ except FileNotFoundError:  # save the writing for later
         # input("OK! Feel free to close the program")
         # exit()
         print("Using default demo ID...")
-        client_id = "ae33cb66617c656"
+        client_id = DEFAULT_CLIENT_ID
 except ValueError:
     input("Config file corrupted... Please fix or delete the config altogether.")
     exit()
