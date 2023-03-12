@@ -3,6 +3,7 @@ import imageprocess
 import uploader
 APP_VERSION = "1.0"
 DEFAULT_CLIENT_ID = "ae33cb66617c656" # <-- let everyone use this ID for now
+IMGUR_ALBUM_URL = "https://imgur.com/a/"
 
 print("imgur uploader v" + APP_VERSION + "\n")
 config = os.path.join(os.getcwd(), "config.txt")
@@ -31,19 +32,20 @@ except ValueError:
 
 if not use_prev_album:
     album_title = input("Enter a title for your new album: ")
-    album_info = uploader.create_imgur_album(album_title, client_id)  # album_info is list [id (url), hash]
+    album_info = uploader.create_imgur_album(album_title, client_id)  # album_info is list [id, hash]
     if not album_info:  #if failed to create album
         exit()
 else:
     album_info = [config_data["PREV_ALBUM_ID"], config_data["PREV_ALBUM_HASH"]]
 
-album_url = "https://imgur.com/a/" + str(album_info[0])
+album_url = IMGUR_ALBUM_URL + str(album_info[0])
 
 print("\n(the link (and album hash) is also saved in albums.txt)")
 with open(config, 'w') as f:
     f.write("CLIENT_ID=" + str(client_id)+ "\n")
-    f.write("PREV_ALBUM_URL=" + album_url + "\n")
+    f.write("PREV_ALBUM_ID=" + str(album_info[0]) + "\n")
     f.write("PREV_ALBUM_HASH=" + str(album_info[1]) )
+    
 imageprocess.getfile(client_id, album_info[1])
 print("After uploading, access your album at this link: " + album_url)
 album_save_file = os.path.join(os.getcwd(), "albums.txt")
