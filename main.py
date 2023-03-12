@@ -13,8 +13,7 @@ try:
         lines = file.readlines()  # returns list of string TODO: handle when config file is messed up
         config_data = dict([tuple(line.strip().split("=")) for line in lines])
         client_id = config_data["CLIENT_ID"]
-        album_title = input("Upload to previous album? Y/N")
-        if album_title.upper() == "Y":
+        if input("Upload to previous album? Y/N\n").upper() == "Y":
             use_prev_album = True
 
 except FileNotFoundError:  # save the writing for later
@@ -45,7 +44,7 @@ with open(config, 'w') as f:
     f.write("CLIENT_ID=" + str(client_id)+ "\n")
     f.write("PREV_ALBUM_ID=" + str(album_info[0]) + "\n")
     f.write("PREV_ALBUM_HASH=" + str(album_info[1]) )
-    
+
 imageprocess.getfile(client_id, album_info[1])
 print("After uploading, access your album at this link: " + album_url)
 album_save_file = os.path.join(os.getcwd(), "albums.txt")
@@ -54,6 +53,6 @@ if not use_prev_album:
         savefile.write(f"Album title: {album_title}\nAlbum URL: {album_url}\nAlbum DeleteHash: {str(album_info[1])}\n\n")
 
 
-exit_program = input("Operation Finished! Press any key to continue...")
+print("Operation Finished!")
 
 exit()
