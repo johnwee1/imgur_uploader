@@ -1,21 +1,31 @@
 import os
 from PIL import Image
 import uploader
-QUALITY = 50
+import warnings
 
-def compress_img(filename, overwrite = False):
+# Turn off warning for decompression bombs. Only do this if you are certain the image source if safe
+warnings.simplefilter('ignore', Image.DecompressionBombWarning)
+
+IMAGE_TARGET_SIZE = 5000000
+
+def compress_img(filename):
+
     img = Image.open(filename)
-    if not overwrite:
-        new_filename = "CP_" + filename
-        img.save(new_filename, optimize = True, quality = QUALITY)
-    else:
-        img.save(filename, optimize = True, quality = QUALITY/3)  # Reduce compression aggression
+    img_size = os.path.getsize(os.path.join(os.getcwd(), filename))
+    if filename.startswith("CP_"):
         new_filename = filename
-    img_size = os.path.getsize(os.path.join(os.getcwd(), new_filename))
-    if img_size > 5000000:
-        return compress_img(new_filename, True)  # Recursively compress until image is smaller than limit
     else:
+        new_filename = "CP_" + filename
+
+    # Base case: image is smaller than limit
+    if img_size < IMAGE_TARGET_SIZE:
+        img.save(new_filename)
         return new_filename
+    
+    # Recursively compress the image
+    quality = int(IMAGE_TARGET_SIZE/img_size * 100)
+    img.save(new_filename, optimize = True, quality = quality)
+    return compress_img(new_filename)
 
 
 
