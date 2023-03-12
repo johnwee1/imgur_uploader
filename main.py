@@ -35,7 +35,7 @@ if not use_prev_album:
     if not album_info:  #if failed to create album
         exit()
 else:
-    album_info = [config_data["PREV_ALBUM_URL"], config_data["PREV_ALBUM_HASH"]]
+    album_info = [config_data["PREV_ALBUM_ID"], config_data["PREV_ALBUM_HASH"]]
 
 album_url = "https://imgur.com/a/" + str(album_info[0])
 
