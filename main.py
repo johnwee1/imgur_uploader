@@ -34,9 +34,10 @@ if not use_prev_album:
     album_info = uploader.create_imgur_album(album_title, client_id)  # album_info is list [id (url), hash]
     if not album_info:  #if failed to create album
         exit()
-    album_url = "https://imgur.com/a/" + str(album_info[0])
 else:
     album_info = [config_data["PREV_ALBUM_URL"], config_data["PREV_ALBUM_HASH"]]
+
+album_url = "https://imgur.com/a/" + str(album_info[0])
 
 print("\n(the link (and album hash) is also saved in albums.txt)")
 with open(config, 'w') as f:
