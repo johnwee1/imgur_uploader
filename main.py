@@ -1,6 +1,7 @@
 import os
 import imageprocess
 import uploader
+
 APP_VERSION = "1.0"
 DEFAULT_CLIENT_ID = "ae33cb66617c656" # <-- let everyone use this ID for now
 IMGUR_ALBUM_URL = "https://imgur.com/a/"
@@ -45,7 +46,10 @@ with open(config, 'w') as f:
     f.write("PREV_ALBUM_ID=" + str(album_info[0]) + "\n")
     f.write("PREV_ALBUM_HASH=" + str(album_info[1]) )
 
-imageprocess.getfile(client_id, album_info[1])
+for file in imageprocess.getfiles():
+    cp_path = imageprocess.compress_img(file)  # Returns ref to new compressed file
+    uploader.upload_image(cp_path, client_id, album_info[1])
+    os.remove(cp_path)  # deletes the compressed photo
 
 print("After uploading, access your album at this link: " + album_url)
 album_save_file = os.path.join(os.getcwd(), "albums.txt")

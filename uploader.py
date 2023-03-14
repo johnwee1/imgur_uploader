@@ -2,6 +2,7 @@ import requests
 import base64
 import os
 import json
+
 # client_id = 'ae33cb66617c656'  # Actually there is no need for a Bearer token, just need client ID is all!!
 # album_hash = '5259359i3'  # Create a new anon album everytime this code is run?
 
@@ -28,8 +29,8 @@ def create_imgur_album(album_title, client_id):
         return [response["data"]["id"], response["data"]["deletehash"]]
 
 
-def upload_image(filename, client_id, album_hash):
-    with open(os.path.join(os.getcwd(), filename), 'rb') as img_file:
+def upload_image(filepath, client_id, album_hash):
+    with open(filepath, 'rb') as img_file:
         encoded_bytes = base64.b64encode(img_file.read())
     payload = {'image': encoded_bytes,
                'album': album_hash}
@@ -46,7 +47,7 @@ def upload_image(filename, client_id, album_hash):
         return False
 
     if response["success"]:
-        print("Upload success: " + filename + "\n")
+        print("Upload success: " + filepath + "\n")
         print(response)
         return True
         # return imgur link to album not here
