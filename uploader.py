@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+from enums import bcolors
 
 # client_id = 'ae33cb66617c656'  # Actually there is no need for a Bearer token, just need client ID is all!!
 # album_hash = '5259359i3'  # Create a new anon album everytime this code is run?
@@ -43,14 +44,14 @@ async def upload_image(session, filepath, client_id, album_hash):
     
     async with session.post(url, headers=headers, data=payload) as response:
         if response.ok:
-            print("Upload success: " + filepath)
+            print(f"{bcolors.OKGREEN}Upload success: {filepath}{bcolors.ENDC}")
             try:
                 print(await response.json())
                 print("\n")
             except json.JSONDecodeError as e:
-                print(f"Error decoding JSON: {e}\n")
+                print(f"{bcolors.WARNING}Error decoding JSON: {e}{bcolors.ENDC}\n")
         else:
-            print(f"Upload failed, status: {response.status} {response.reason}")
+            print(f"{bcolors.FAIL}Upload failed, status: {response.status} {response.reason}{bcolors.ENDC}")
         
     # Delete the compressed photo 
     os.remove(filepath)  

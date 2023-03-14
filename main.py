@@ -4,13 +4,14 @@ import uploader
 import asyncio
 import aiohttp
 from concurrent.futures import ThreadPoolExecutor
+from enums import bcolors
 
 APP_VERSION = "1.0"
 DEFAULT_CLIENT_ID = "ae33cb66617c656" # <-- let everyone use this ID for now
 IMGUR_ALBUM_URL = "https://imgur.com/a/"
 
 async def main():
-    print("imgur uploader v" + APP_VERSION + "\n")
+    print(f"{bcolors.HEADER}{bcolors.BOLD}imgur uploader v{APP_VERSION}{bcolors.ENDC}\n")
     config = os.path.join(os.getcwd(), "config.txt")
     use_prev_album = False
     try:
@@ -58,7 +59,7 @@ async def main():
             for path in cp_paths:
                 tg.create_task(uploader.upload_image(session, path, client_id, album_info[1]))
 
-    print(f"After uploading, access your album at this link: {album_url} \n")
+    print(f"You can access your album at this link: {bcolors.OKBLUE}{bcolors.UNDERLINE}{album_url}{bcolors.ENDC}\n")
     album_save_file = os.path.join(os.getcwd(), "albums.txt")
     if not use_prev_album:
         with open(album_save_file, 'a') as savefile:
@@ -67,7 +68,7 @@ async def main():
                            f"Album DeleteHash: {str(album_info[1])}\n\n")
 
 
-    print("Operation Finished!")
+    print(f"{bcolors.BOLD}Operation Finished!{bcolors.ENDC}\n")
 
     exit()
 
