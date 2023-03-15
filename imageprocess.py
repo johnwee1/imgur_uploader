@@ -32,7 +32,7 @@ def compress_img(filepath):
 def getfiles():
 
     files = []
-    accepted_types = ['.jpg', '.jpeg']
+    accepted_types = ['.jpg', '.jpeg', '.png']
     current_working_dir = os.getcwd()
 
     for file in os.listdir(current_working_dir):

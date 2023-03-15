@@ -67,7 +67,6 @@ async def main():
                            f"Album URL: {album_url}\n"
                            f"Album DeleteHash: {str(album_info[1])}\n\n")
 
-
     print(f"{bcolors.BOLD}Operation Finished!{bcolors.ENDC}\n")
 
     exit()

@@ -1,4 +1,6 @@
 *.jpg
+*.jpeg
+*.png
 venv
 .idea/
 __pycache__/

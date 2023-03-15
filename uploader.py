@@ -34,8 +34,9 @@ async def upload_image(session, filepath, client_id, album_hash):
     url = 'https://api.imgur.com/3/image'
 
     with open(filepath, 'rb') as img_file:
-        payload = {'image': img_file.read(),
-               'album': album_hash,
+        payload = {
+            'image': img_file.read(),
+            'album': album_hash
         }
 
     headers = {
@@ -43,15 +44,18 @@ async def upload_image(session, filepath, client_id, album_hash):
     }
     
     async with session.post(url, headers=headers, data=payload) as response:
+
+        try:
+            res = await response.json()
+        except json.JSONDecodeError as e:
+            print(f"{bcolors.WARNING}Error decoding JSON: {e}{bcolors.ENDC}\n")
+            
         if response.ok:
             print(f"{bcolors.OKGREEN}Upload success: {filepath}{bcolors.ENDC}")
-            try:
-                print(await response.json())
-                print("\n")
-            except json.JSONDecodeError as e:
-                print(f"{bcolors.WARNING}Error decoding JSON: {e}{bcolors.ENDC}\n")
+            print(res)
         else:
-            print(f"{bcolors.FAIL}Upload failed, status: {response.status} {response.reason}{bcolors.ENDC}")
-        
+            print(f"{bcolors.FAIL}Upload failed: {filepath} ({response.status} {response.reason}){bcolors.ENDC}")
+            print(f"{bcolors.FAIL}Error {res['data']['error']['code']}: {res['data']['error']['message']}{bcolors.ENDC}")
+
     # Delete the compressed photo 
     os.remove(filepath)  
