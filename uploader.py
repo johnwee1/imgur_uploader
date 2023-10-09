@@ -7,11 +7,17 @@ from enums import bcolors
 # album_hash = '5259359i3'  # Create a new anon album everytime this code is run?
 
 def create_imgur_album(album_title, client_id):
-    payload = {'title': album_title,
-               'description': 'Album created by imgur uploader',
-               }
-    files = [
-    ]
+    """
+
+    :param album_title: Title of the album
+    :param client_id: Client ID
+    :return: [id, deleteHash]
+    """
+    payload = {
+        'title': album_title,
+        'description': 'Album created by imgur uploader',
+    }
+    files = []
     headers = {
         'Authorization': 'Client-ID ' + str(client_id)
     }

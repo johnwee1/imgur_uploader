@@ -13,6 +13,7 @@ def compress_img(filepath):
     img_size = os.path.getsize(filepath)
     img_name = os.path.basename(filepath)
 
+    # Overwrites image if and only if the image is a duplicate (not the base image)
     if img_name.startswith("CP_"):
         dest_path = os.path.join(os.getcwd(), img_name)
     else:

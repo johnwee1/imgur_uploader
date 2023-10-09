@@ -15,6 +15,7 @@ async def main():
     config = os.path.join(os.getcwd(), "config.txt")
     use_prev_album = False
     try:
+        # Open pre-existing configuration, if any.
         with open(config, 'r') as file:
             lines = file.readlines()  # returns list of string TODO: handle when config file is messed up
             config_data = dict([tuple(line.strip().split("=")) for line in lines])
@@ -22,7 +23,8 @@ async def main():
             if input("Upload to previous album? Y/N\n").upper() == "Y":
                 use_prev_album = True
 
-    except FileNotFoundError:  # save the writing for later
+    except FileNotFoundError:
+        # Init a new config file
         print("Config file not detected... Initializing config\n")
         print("Paste your imgur client ID here, leave blank if you want to modify the config.txt instead.\n")
         client_id = input("Enter Client ID: (v1.0 uses my account client ID) ")
@@ -35,9 +37,10 @@ async def main():
         input("Config file corrupted... Please fix or delete the config altogether.")
         exit()
 
+    # If no previous album is found / indicate as no, upload to a new album
     if not use_prev_album:
         album_title = input("Enter a title for your new album: ")
-        album_info = uploader.create_imgur_album(album_title, client_id)  # album_info is list [id, hash]
+        album_info = uploader.create_imgur_album(album_title, client_id)
         if not album_info:  #if failed to create album
             exit()
     else:
@@ -45,12 +48,15 @@ async def main():
 
     album_url = IMGUR_ALBUM_URL + str(album_info[0])
 
+    # write album info into the config file
     print("\n(the link (and album hash) is also saved in albums.txt)")
     with open(config, 'w') as f:
         f.write("CLIENT_ID=" + str(client_id)+ "\n")
         f.write("PREV_ALBUM_ID=" + str(album_info[0]) + "\n")
         f.write("PREV_ALBUM_HASH=" + str(album_info[1]) )
 
+    # asynchronously apply function compress_img() into all the image files returned by getfiles
+    # waits until executor is finished
     with ThreadPoolExecutor() as executor:
         cp_paths = executor.map(imageprocess.compress_img, imageprocess.getfiles())
 
